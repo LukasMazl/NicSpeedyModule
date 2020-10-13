@@ -1,0 +1,4 @@
+./python/*
+./build/*
+./cmake-build-debug/*
+./venv/*
