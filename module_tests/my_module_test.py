@@ -1,3 +1,4 @@
-import helloworld
+import my_module
 
-print(helloworld.secti())
+my_module.show_if()
+devices = my_module.get_all_if()
