@@ -1,24 +1,30 @@
 Testing my module
 
-real    0m0.055s
-user    0m0.024s
-sys     0m0.008s
+real    0m0.038s
+user    0m0.022s
+sys     0m0.015s
 -------------------
 Testing netifaces
 
-real    0m3.557s
-user    0m0.949s
-sys     0m2.583s
+real    0m3.437s
+user    0m0.876s
+sys     0m2.546s
 -------------------
 Testing get_nic
 
-real    0m5.396s
-user    0m2.707s
-sys     0m2.777s
+real    0m5.218s
+user    0m2.699s
+sys     0m2.650s
 -------------------
 Testing ifaddr
 
-real    0m0.382s
-user    0m0.224s
-sys     0m0.018s
+real    0m0.249s
+user    0m0.207s
+sys     0m0.042s
+-------------------
+Testing getNifs
+
+real    0m0.106s
+user    0m0.091s
+sys     0m0.012s
 -------------------
