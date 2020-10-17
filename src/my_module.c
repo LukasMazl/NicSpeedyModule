@@ -29,8 +29,10 @@ static char* if_addr_family_to_string(int family) {
             (family == AF_INET6) ? "AF_INET6" : "???");
 }
 
-static char* to_ipv6(struct sockaddr_in *sa) {
-    return inet_ntoa(sa->sin6_family);
+static char* to_ipv6(struct sockaddr_in6 *sa) {
+    char buf[128];
+    inet_ntop(AF_INET6, sa, &buf, sizeof(buf));
+    return buf;
 }
 
 static char* to_ipv4(struct sockaddr_in *sa) {
@@ -44,9 +46,9 @@ static PyObject* get_interface_info(struct ifaddrs *ifa) {
      char *addrIp6;
 
      if(ifa->ifa_addr->sa_family == AF_INET6) {
-
+         addrIp6 = to_ipv6((struct sockaddr_in6 *) ifa->ifa_addr);
      } else if(ifa->ifa_addr->sa_family == AF_INET) {
-        addrIp4 = to_ipv4((struct sockaddr_in *) ifa->ifa_addr);
+         addrIp4 = to_ipv4((struct sockaddr_in *) ifa->ifa_addr);
      }
 
      return Py_BuildValue("{sssssissss}",
