@@ -1,13 +1,15 @@
-# Vytváření rozšiřujícího modulu pro Python
+# NIC Speedy Module
 
-Tento resporitař slouží k přípravě diplomové práce, která se zabívá porovnáním Pythno modulů
-pro získání informací o NICs. Ve složce /module_tests jsou vytvořené zátěžové testy. Aktuální
-výsledky těchto testu [jsou vidět zde.](./current_rest_results.txt)
+This repository has been created for demonstrating of problem which appears in systems
+with big number of NICs (for example Docker systems). 
+In /module_tests are created tests which measure total time of getting info about
+system NICs. 
+Each test is written for different python module.
+ 
+Current results of testing modules you can see [here.](./current_rest_results.txt)
 
 ## TODO LIST
 
-- [ ] Zprovoznit modul ethtool pro testovani
-- [ ] Vytvoření knihovny my_module_libs.c (například) pro extrahovaní logiky z my_module.c, tak aby my_module.c složil
-pouze jako bridge mezi C a Python.
-- [ ] Vytvořit python funkce pro lepší získání/manipulaci s daty, které příjdou z my_module.c
-- [ ] Přejmenovat my_module.c!!!!! 
+- [ ] Add a new test case for Ethtool module
+- [ ] Create python function for better manipulating with output data from my_module.c.
+- [ ] Rename my_module.c 
