@@ -30,8 +30,8 @@ static char* if_addr_family_to_string(int family) {
 }
 
 static char* to_ipv6(struct sockaddr_in6 *sa) {
-    char buf[128];
-    inet_ntop(AF_INET6, sa, &buf, sizeof(buf));
+    char *buf = malloc (sizeof (char) * 128);
+    inet_ntop(AF_INET6, sa, buf, sizeof (char) * 128);
     return buf;
 }
 
@@ -42,8 +42,8 @@ static char* to_ipv4(struct sockaddr_in *sa) {
 static PyObject* get_interface_info(struct ifaddrs *ifa) {
      char* if_family = if_addr_family_to_string(ifa->ifa_addr->sa_family);
      int is_inteface_up = (ifa->ifa_flags & IFF_UP)? 1: 0;
-     char *addrIp4;
-     char *addrIp6;
+     char *addrIp4 = NULL;
+     char *addrIp6 = NULL;
 
      if(ifa->ifa_addr->sa_family == AF_INET6) {
          addrIp6 = to_ipv6((struct sockaddr_in6 *) ifa->ifa_addr);
@@ -69,7 +69,6 @@ static PyObject* get_all_if(PyObject* self) {
     struct ifaddrs *ifap, *ifa;
     getifaddrs(&ifap);
     PyObject *list = PyList_New(0);
-    int i = 0;
     for (ifa = ifap; ifa; ifa = ifa->ifa_next)
     {
         PyObject* item = get_interface_info(ifa);
@@ -79,7 +78,7 @@ static PyObject* get_all_if(PyObject* self) {
     return list;
 }
 
-static void getMac(char *iface) {
+/*static void getMac(char *iface) {
     int fd;
     struct ifreq ifr;
     unsigned char *mac;
@@ -99,13 +98,10 @@ static void getMac(char *iface) {
     printf("Mac : %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n" , mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 
 }
-
+*/
 static PyObject* show_if(PyObject* self) {
     struct ifaddrs *ifap, *ifa;
     char *addr;
-    int family, s, n;
-    char host[NI_MAXHOST];
-
     int N = 0;
     getifaddrs(&ifap);
     for (ifa = ifap; ifa; ifa = ifa->ifa_next)
@@ -114,16 +110,7 @@ static PyObject* show_if(PyObject* self) {
     int i = 0;
     PyObject *python_val = PyList_New(N);
     for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
-        family = ifa->ifa_addr->sa_family;
-        /* Display interface name and family (including symbolic
-           form of the latter for the common families) */
-
-     /*   printf("%-8s %s (%d)\n",
-               ifa->ifa_name,
-               if_addr_family_to_string(family),
-               family);*/
         addr = to_ipv4((struct sockaddr_in *) ifa->ifa_addr);
-       // getMac(ifa->ifa_name);
         PyObject *python_int;
         if (ifa->ifa_flags & IFF_UP) {
             python_int = Py_BuildValue("{s{s[ss]}}", ifa->ifa_name, "ipv4", addr, "up");
@@ -138,15 +125,10 @@ static PyObject* show_if(PyObject* self) {
     return python_val;
 }
 
-static char show_if_docs[] =
-        "usage: show_if()\n";
-
-static char get_all_if_docs[] =
-        "usage: show_if()\n";
 
 static PyMethodDef module_methods[] = {
-        {"show_if", (PyCFunction) show_if, METH_NOARGS, show_if_docs},
-        {"get_all_if", (PyCFunction) get_all_if, METH_NOARGS, get_all_if_docs},
+        {"show_if", (PyCFunction) show_if, METH_NOARGS, "usage: show_if()\n"},
+        {"get_all_if", (PyCFunction) get_all_if, METH_NOARGS, "usage: show_if()\n"},
         {NULL}
 };
 
