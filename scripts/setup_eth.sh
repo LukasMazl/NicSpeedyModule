@@ -27,5 +27,6 @@ do
   interface_name=$interface_name_prefix$i
   ip link add $interface_name type dummy
   ip addr add $ip dev $interface_name
+  ip -6 address add 2A00:0C98:2060:A000:0001:0000:1d1e:ca75/64 dev $interface_name
   ip link set $interface_name up
 done;
