@@ -31,23 +31,38 @@ static char* if_addr_family_to_string(int family) {
 
 static char* to_ipv6(struct sockaddr_in6 *sa) {
     char *str = malloc (sizeof (char) * INET6_ADDRSTRLEN);
-    inet_ntop(AF_INET6, &sa->sin6_addr, str, INET6_ADDRSTRLEN);
+    struct in6_addr in6Addr = sa->sin6_addr;
+    inet_ntop(AF_INET6, &in6Addr, str, INET6_ADDRSTRLEN);
     return str;
 }
 
 static char* to_ipv4(struct sockaddr_in *sa) {
-    return inet_ntoa(sa->sin_addr);
+    if(sa == NULL)
+    {
+        return NULL;
+    }
+    struct in_addr inAddr = sa->sin_addr;
+    return inet_ntoa(inAddr);
 }
 
 static PyObject* get_interface_info(struct ifaddrs *ifa) {
-     char* if_family = if_addr_family_to_string(ifa->ifa_addr->sa_family);
-     int is_inteface_up = (ifa->ifa_flags & IFF_UP)? 1: 0;
-     char *addr = NULL;
+     if(ifa == NULL) {
+         return NULL;
+     }
 
-     if(ifa->ifa_addr->sa_family == AF_INET6) {
-         addr = to_ipv6((struct sockaddr_in6 *) ifa->ifa_addr);
-     } else if(ifa->ifa_addr->sa_family == AF_INET) {
-         addr = to_ipv4((struct sockaddr_in *) ifa->ifa_addr);
+     char* if_family = NULL;
+     int ifa_flags = ifa->ifa_flags;
+     int is_inteface_up = (ifa_flags & IFF_UP)? 1: 0;
+     char *addr = NULL;
+     if(ifa->ifa_addr != NULL) {
+         struct sockaddr* ifa_addr = ifa->ifa_addr;
+         int sa_family = ifa_addr->sa_family;
+         if_family = if_addr_family_to_string(sa_family);
+         if(sa_family == AF_INET6) {
+             addr = to_ipv6((struct sockaddr_in6 *) ifa_addr);
+         } else if(sa_family == AF_INET) {
+             addr = to_ipv4((struct sockaddr_in *) ifa_addr);
+         }
      }
 
      return Py_BuildValue("{sssssiss}",
@@ -69,7 +84,9 @@ static PyObject* get_all_if(PyObject* self) {
     for (ifa = ifap; ifa; ifa = ifa->ifa_next)
     {
         PyObject* item = get_interface_info(ifa);
-        PyList_Append(list, item);
+        if(item != NULL) {
+            PyList_Append(list, item);
+        }
     }
     freeifaddrs(ifap);
     return list;
@@ -98,10 +115,13 @@ static PyObject* get_all_if(PyObject* self) {
 */
 static int is_if_up(struct ifaddrs *ifa)
 {
+    if(ifa == NULL)
+        return 0;
     return ifa->ifa_flags & IFF_UP;
 }
 
-static PyObject* get_all_if_by_AF_int(int AF) {
+static PyObject* get_all_if_by_AF_int(int AF)
+{
     struct ifaddrs *ifap, *ifa;
     getifaddrs(&ifap);
 
@@ -109,7 +129,8 @@ static PyObject* get_all_if_by_AF_int(int AF) {
     for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
         struct sockaddr* ifa_addr = ifa->ifa_addr;
         if(ifa_addr != NULL) {
-            if (ifa_addr->sa_family == AF) {
+            int sa_family = ifa_addr->sa_family;
+            if ( sa_family == AF) {
                 PyObject* item = Py_BuildValue("s", ifa->ifa_name);
                 PyList_Append(list, item);
             }
@@ -119,7 +140,8 @@ static PyObject* get_all_if_by_AF_int(int AF) {
     return list;
 }
 
-static PyObject* get_info_if_by_AF_int(int AF) {
+static PyObject* get_info_if_by_AF_int(int AF)
+{
     struct ifaddrs *ifap, *ifa;
     getifaddrs(&ifap);
 
@@ -143,6 +165,7 @@ static PyObject* get_ip(PyObject *self, PyObject *args)
     if (!PyArg_ParseTuple(args, "s", &name)) {
         return NULL;
     }
+
     struct ifaddrs *ifap, *ifa;
     getifaddrs(&ifap);
     for (ifa = ifap; ifa; ifa = ifa->ifa_next) {
