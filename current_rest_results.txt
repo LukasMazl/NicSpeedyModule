@@ -1,30 +1,38 @@
+Tested for 1000 NIC
+
 Testing my module
 
-real    0m0.038s
-user    0m0.022s
-sys     0m0.015s
+real	0m0.046s
+user	0m0.037s
+sys	  0m0.009s
 -------------------
 Testing netifaces
 
-real    0m3.437s
-user    0m0.876s
-sys     0m2.546s
+real	0m8.823s
+user	0m3.006s
+sys	  0m5.777s
+-------------------
+Testing ethtool
+
+real	0m8.390s
+user	0m2.928s
+sys	  0m5.426s
 -------------------
 Testing get_nic
 
-real    0m5.218s
-user    0m2.699s
-sys     0m2.650s
+real	0m9.160s
+user	0m5.939s
+sys	  0m3.358s
 -------------------
 Testing ifaddr
 
-real    0m0.249s
-user    0m0.207s
-sys     0m0.042s
+real	0m0.521s
+user	0m0.499s
+sys	  0m0.023s
 -------------------
 Testing getNifs
 
-real    0m0.106s
-user    0m0.091s
-sys     0m0.012s
+real	0m0.223s
+user	0m0.205s
+sys	  0m0.018s
 -------------------
