@@ -15,7 +15,7 @@ install:
     fi
     pip install .
 script:
-  - python smoke_test.py
+  - python -m pytest smoke_test.py
 
 matrix:
   include:
