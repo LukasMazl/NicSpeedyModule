@@ -92,27 +92,6 @@ static PyObject* get_all_if(PyObject* self) {
     return list;
 }
 
-/*static void getMac(char *iface) {
-    int fd;
-    struct ifreq ifr;
-    unsigned char *mac;
-
-    fd = socket(AF_INET, SOCK_DGRAM, 0);
-
-    ifr.ifr_addr.sa_family = AF_INET;
-    strncpy(ifr.ifr_name , iface , IFNAMSIZ-1);
-
-    ioctl(fd, SIOCGIFHWADDR, &ifr);
-
-    close(fd);
-
-    mac = (unsigned char *)ifr.ifr_hwaddr.sa_data;
-
-    //display mac address
-    printf("Mac : %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n" , mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-
-}
-*/
 static int is_if_up(struct ifaddrs *ifa)
 {
     if(ifa == NULL)
@@ -130,7 +109,7 @@ static PyObject* get_all_if_by_AF_int(int AF)
         struct sockaddr* ifa_addr = ifa->ifa_addr;
         if(ifa_addr != NULL) {
             int sa_family = ifa_addr->sa_family;
-            if ( sa_family == AF) {
+            if (sa_family == AF) {
                 PyObject* item = Py_BuildValue("s", ifa->ifa_name);
                 PyList_Append(list, item);
             }
@@ -249,27 +228,27 @@ static PyObject* get_active_devices(void)
 }
 
 static PyMethodDef module_methods[] = {
-        {"get_all_system_if", (PyCFunction) get_all_if, METH_NOARGS, "usage: show_if()\n"},
-        {"get_all_ipv4_if", (PyCFunction) get_list_ipv4_if, METH_NOARGS, "usage: get_list_ipv4_if()\n"},
-        {"get_all_ipv6_if", (PyCFunction) get_list_ipv6_if, METH_NOARGS, "usage: get_list_ipv6_if()\n"},
-        {"get_all_if_by_AF", (PyCFunction) get_all_if_by_AF, METH_VARARGS, "usage: get_all_if_by_AF()\n"},
-        {"get_info_if_by_AF", (PyCFunction) get_info_if_by_AF, METH_VARARGS, "usage: get_info_if_by_AF()\n"},
-        {"get_active_devices", (PyCFunction) get_active_devices, METH_NOARGS, "usage: get_active_devices()\n"},
-        {"get_info_about_active_devices", (PyCFunction) get_info_about_active_devices, METH_NOARGS, "usage: get_info_about_active_devices()\n"},
-        {"get_ip", (PyCFunction) get_ip, METH_VARARGS, "usage: get_ip()\n"},
+        {"get_all_system_if",             (PyCFunction) get_all_if,                    METH_NOARGS,  "usage: get_all_system_if()\n"},
+        {"get_all_ipv4_if",               (PyCFunction) get_list_ipv4_if,              METH_NOARGS,  "usage: get_list_ipv4_if()\n"},
+        {"get_all_ipv6_if",               (PyCFunction) get_list_ipv6_if,              METH_NOARGS,  "usage: get_list_ipv6_if()\n"},
+        {"get_all_if_by_AF",              (PyCFunction) get_all_if_by_AF,              METH_VARARGS, "usage: get_all_if_by_AF()\n"},
+        {"get_info_if_by_AF",             (PyCFunction) get_info_if_by_AF,             METH_VARARGS, "usage: get_info_if_by_AF()\n"},
+        {"get_active_devices",            (PyCFunction) get_active_devices,            METH_NOARGS,  "usage: get_active_devices()\n"},
+        {"get_info_about_active_devices", (PyCFunction) get_info_about_active_devices, METH_NOARGS,  "usage: get_info_about_active_devices()\n"},
+        {"get_ip",                        (PyCFunction) get_ip,                        METH_VARARGS, "usage: get_ip()\n"},
         {NULL}
 };
 
 static struct PyModuleDef SpeedyNicModuleDef =
         {
                 PyModuleDef_HEAD_INIT,
-                "my_module", /* name of module */
-                "usage: my_module.show_if()\n", /* module documentation, may be NULL */
+                "nicSpeedyModule", /* name of module */
+                "usage: nicSpeedyModule.get_all_system_if()\n", /* module documentation, may be NULL */
                 -1,   /* size of per-interpreter state of the module, or -1 if the module keeps state in global variables. */
                 module_methods
         };
 
-PyMODINIT_FUNC PyInit_my_module(void)
+PyMODINIT_FUNC PyInit_nicSpeedyModule(void)
 {
     return PyModule_Create(&SpeedyNicModuleDef);
 }
