@@ -31,9 +31,4 @@ matrix:
       python: 3.8
     - os: linux
       python: 3.9
-    - os: osx
-      language: generic
-      env: PYTHON_VERSION=3.6.2
-    - os: osx
-      language: generic
 env: PYTHON_VERSION=3.5.2
