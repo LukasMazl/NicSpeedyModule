@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
@@ -10,11 +8,9 @@
 #include <sys/types.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
-#include <linux/wireless.h>
 #include <arpa/inet.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <ifaddrs.h>
+#include <net/if.h>
+
 
 #define INET6_ADDRSTRLEN 46
 
@@ -24,9 +20,16 @@
 #define IF_ADDR "addr"
 
 static char* if_addr_family_to_string(int family) {
-    return  ((family == AF_PACKET) ? "AF_PACKET" :
-            (family == AF_INET) ? "AF_INET" :
-            (family == AF_INET6) ? "AF_INET6" : "???");
+    #ifdef HAS_AF_PACKET
+        return  ((family == AF_PACKET) ? "AF_PACKET" :
+                (family == AF_INET) ? "AF_INET" :
+                (family == AF_INET6) ? "AF_INET6" : "???");
+    #else
+        return  ((family == AF_INET) ? "AF_INET" :
+                (family == AF_INET6) ? "AF_INET6" : "???");
+    #endif
+ 
+
 }
 
 static char* to_ipv6(struct sockaddr_in6 *sa) {
@@ -90,6 +93,36 @@ static PyObject* get_all_if(PyObject* self) {
     }
     freeifaddrs(ifap);
     return list;
+}
+
+static PyObject* get_them_all(void) {
+    struct ifaddrs *ifap, *ifa;
+    getifaddrs(&ifap);
+    PyObject *dict = PyDict_New();
+    for (ifa = ifap; ifa; ifa = ifa->ifa_next) 
+    {
+        PyObject* item = get_interface_info(ifa);
+        if(!item) 
+            continue;
+        
+        char *ifname = ifa->ifa_name;
+        PyObject* pyIfname = PyUnicode_FromString(ifname);
+        PyObject* if_results;
+        if(PyDict_Contains(dict, pyIfname)) 
+        {
+            if_results = PyDict_GetItem(dict, pyIfname);
+        } 
+        else 
+        {
+            if_results = PyList_New(0);
+            PyDict_SetItem(dict, pyIfname,if_results);
+        }
+        
+        PyList_Append(if_results, item);
+        Py_XDECREF(pyIfname); 
+    }
+    freeifaddrs(ifap);
+    return dict;
 }
 
 static int is_if_up(struct ifaddrs *ifa)
@@ -228,6 +261,7 @@ static PyObject* get_active_devices(void)
 }
 
 static PyMethodDef module_methods[] = {
+        {"get_them_all",                  (PyCFunction) get_them_all,                  METH_NOARGS,  "usage: get_them_all()\n"},
         {"get_all_system_if",             (PyCFunction) get_all_if,                    METH_NOARGS,  "usage: get_all_system_if()\n"},
         {"get_all_ipv4_if",               (PyCFunction) get_list_ipv4_if,              METH_NOARGS,  "usage: get_list_ipv4_if()\n"},
         {"get_all_ipv6_if",               (PyCFunction) get_list_ipv6_if,              METH_NOARGS,  "usage: get_list_ipv6_if()\n"},
