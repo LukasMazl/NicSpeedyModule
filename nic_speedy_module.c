@@ -11,7 +11,6 @@
 #include <arpa/inet.h>
 #include <net/if.h>
 
-
 #define INET6_ADDRSTRLEN 46
 
 #define IFA_NAME "name"
