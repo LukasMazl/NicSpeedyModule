@@ -1,6 +1,10 @@
 # NIC Speedy Module
 
-[![Build Status](https://www.travis-ci.com/LukasMazl/NicSpeedyModule.svg?branch=master)](https://www.travis-ci.com/LukasMazl/NicSpeedyModule)
+
+[|     OS     	_|   Check state  	|
+|:------------:	|:--------------:	|
+|____Unix_______|  [![Build Status](https://www.travis-ci.com/LukasMazl/NicSpeedyModule.svg?branch=master)](https://www.travis-ci.com/LukasMazl/NicSpeedyModule) |
+|____OsX________|___[![Build Status](https://www.travis-ci.com/LukasMazl/NicSpeedyModule.svg?branch=master)](https://www.travis-ci.com/LukasMazl/NicSpeedyModule)|
 
 This repository were created for demonstrating of problem which appears in systems
 with a lots of NICs. Lets say you have a system with 1000 NIC. If you will use ethtool or netifaces,
