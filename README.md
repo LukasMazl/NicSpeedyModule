@@ -78,8 +78,8 @@ results = nic.get_them_all()
 interface = results["lo0"][0] # Take first result from list
 
 
-is_if_up = (interface["flags"] & nic.IFF_LOOPBACK) != 0
-print(is_if_up)
+is_loopback = (interface["flags"] & nic.IFF_LOOPBACK) != 0
+print(is_loopback)
 ```
 
 
