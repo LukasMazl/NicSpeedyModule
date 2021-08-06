@@ -25,6 +25,7 @@ NicSpeedyModule uses system library getifaddrs.h. Results from the libary are tr
 |     flags    	| Integer 	|                  32841                  	|
 |     addr     	|  String 	|              127.0.0.1, ::1             	|
 | addr_netmask 	|  String 	| 255.255.255.0,<br>ffff:ffff:ffff:ffff:: 	|
+
  
 ### Transform family to AddrFamily type
 Because value family is integer type, so it looks like a magic number, but its not. This number represent Address Family type.

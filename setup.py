@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 module_ext = Extension('nicSpeedyModule', ['nic_speedy_module.c'])
 
 setup(
-     name='NicSpeedyModule',  
+     name='NicSpeedyModule',
      version='1.1.0',
      author="Lukas Mazl",
      author_email="lukasmazl586@gmail.com",
