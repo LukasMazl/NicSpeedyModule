@@ -45,7 +45,7 @@ print(addr_family_type)
 
 
 ### Flags description
-This module allows to access to interface flags, which could be used for determining whather is interface up or whather support multicast etc...
+This module allows to access to interface flags, which could be used for determining whether is interface up or whether support multicast etc...
     
     Device flags
     IFF_UP            Interface is running.
@@ -70,7 +70,7 @@ This module allows to access to interface flags, which could be used for determi
 
 (Taken from https://man7.org/linux/man-pages/man7/netdevice.7.html)
 
-Here is a simple example how to determinate whather is it loopback interface.
+Here is a simple example how to determine whether is it loopback interface.
 
 ```python
 import nicSpeedyModule as nic
