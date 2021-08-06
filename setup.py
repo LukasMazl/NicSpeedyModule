@@ -7,8 +7,8 @@ with open("README.md", "r") as fh:
 module_ext = Extension('nicSpeedyModule', ['nic_speedy_module.c'])
 
 setup(
-     name='NicSpeedyModule',  
-     version='1.0.2',
+     name='NicSpeedyModule',
+     version='1.1.0',
      author="Lukas Mazl",
      author_email="lukasmazl586@gmail.com",
      description="Package for fetching network interface information",
@@ -23,6 +23,7 @@ setup(
          "Development Status :: 4 - Beta",
          "License :: OSI Approved :: MIT License",
          "Operating System :: POSIX",
+         "Operating System :: MacOS :: MacOS X",
          "Topic :: System :: Networking",
          "Topic :: System :: Operating System",
          "Programming Language :: Python :: 3",
