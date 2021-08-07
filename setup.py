@@ -8,7 +8,7 @@ module_ext = Extension('nicSpeedyModule', ['nic_speedy_module.c'])
 
 setup(
      name='NicSpeedyModule',
-     version='1.1.0',
+     version='1.1.1',
      author="Lukas Mazl",
      author_email="lukasmazl586@gmail.com",
      description="Package for fetching network interface information",
